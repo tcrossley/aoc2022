@@ -30,32 +30,21 @@ pub fn day1() {
 }
 
 fn day2() {
-    let input = include_str!("../data/day2.txt");
+    let input = include_bytes!("../data/day2.txt");
+    // outcomes using strategy 1: where outcomes1[3*i+j] is score if opponent plays i, I play j (i, j are 0, 1, or 2)
+    let outcomes1 = [3+1, 6+2, 0+3, 0+1, 3+2, 6+3, 6+1, 0+2, 3+3];
+    // outcomes using strategy 2: where outcomes1[3*i+j] is score if opponent plays i, I play j (i, j are 0, 1, or 2)
+    let outcomes2 = [0+3, 3+1, 6+2, 0+1, 3+2, 6+3, 0+2, 3+3, 6+1];
+
     let start = Instant::now();
 
-    let calc_score1 = |game: &str| {
-        let b = game.as_bytes();
-        // opponents play as 0,1,2
-        let opp = (b[0] - b'A') as i32;
-        // my play as 0,1,2
-        let my = (b[2] - b'X') as i32;
-        if (my+1)%3 == opp { 0+my+1 }
-        else if my == opp { 3+my+1 }
-        else { 6+my+1 }
-    };
-    let calc_score2 = |game: &str| {
-        let b = game.as_bytes();
-        // opponents play as 0,1,2
-        let opp = (b[0] - b'A') as i32;
-        // my strat as 0,1,2
-        let strat = (b[2] - b'X') as i32;
-        if strat == 0 { 0+(opp+2)%3+1 }
-        else if strat == 1 { 3+opp+1 }
-        else { 6+(opp+1)%3+1 }
-    };
-
-    let part1: i32 = input.lines().map(calc_score1).sum();
-    let part2: i32 = input.lines().map(calc_score2).sum();
+    let mut part1 = 0;
+    let mut part2 = 0;
+    for c in input.chunks_exact(4) {
+        let index = (3*(c[0]-b'A') + (c[2]-b'X')) as usize;
+        part1 += outcomes1[index];
+        part2 += outcomes2[index];
+    }
     let elapsed = Instant::now()-start;
     println!("Day 2");
     println!("  Part 1: {}", part1);
