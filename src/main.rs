@@ -4,6 +4,7 @@ fn main() {
     day1();
     day2();
     day3();
+    day4();
 }
 
 pub fn day1() {
@@ -110,6 +111,36 @@ fn day3() {
 
     let elapsed = Instant::now()-start;
     println!("Day 3");
+    println!("  Part 1: {}", part1);
+    println!("  Part 2: {}", part2);
+    println!("  Elapsed time: {:?}", elapsed);
+}
+
+fn day4() {
+    let start = Instant::now();
+    let input = include_str!("../data/day4.txt");
+
+    let mut part1 = 0;
+    let mut part2 = 0;
+    for line in input.lines() {
+        let (a, b) = line.split_once(',').unwrap();
+        let (a1, a2) = a.split_once('-').unwrap();
+        let (a1, a2) = (a1.parse::<i32>().unwrap(), a2.parse::<i32>().unwrap());
+        let (b1, b2) = b.split_once('-').unwrap();
+        let (b1, b2) = (b1.parse::<i32>().unwrap(), b2.parse::<i32>().unwrap());
+        
+        if (a1 <= b1 && b2 <= a2) || (b1 <= a1 && a2 <= b2) {
+            part1 += 1;
+        }
+
+        if (a1 <= b2 && a2 >= b1) || (b1 <= a2 && b2 >= a1) {
+            part2 += 1;
+        }
+    }
+
+
+    let elapsed = Instant::now()-start;
+    println!("Day 4");
     println!("  Part 1: {}", part1);
     println!("  Part 2: {}", part2);
     println!("  Elapsed time: {:?}", elapsed);
